@@ -24,7 +24,19 @@
   programs.command-not-found.enable = false;
   environment.systemPackages = with pkgs; [ git curl tmux vim ];
   programs.nix-ld.enable = true; # lets downloaded generic Linux binaries run
-
+  programs.git = {
+    enable = true;
+    config = {
+      init.defaultBranch = "main";
+      credential.helper = "manager";
+      credential.credentialStore = "secretservice";
+    };
+    push.autoSetupRemote = true;
+  };
+  environment.systemPackages = with pkgs; [
+    git-credential-manager
+  ];
+  services.gnome.gnome-keyring.enable = true;
   # --- Users -----------------------------------------------------------------
   users.mutableUsers = false;
   users.users.root.hashedPassword = "!"; # root login disabled
