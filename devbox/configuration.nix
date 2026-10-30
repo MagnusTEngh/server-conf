@@ -121,10 +121,12 @@
   };
 
   # --- Keep runaway agents from starving sshd/tailscale ----------------------
-  environment.etc."systemd/system/user-1001.slice.d/limits.conf".text = ''
-    [Slice]
-    MemoryHigh=70%
-    MemoryMax=80%
-    TasksMax=4096
-  '';
+    systemd.slices."user-1001" = {
+    overrideStrategy = "asDropin"; # drop-in on logind's per-user slice
+    sliceConfig = {
+      MemoryHigh = "70%";
+      MemoryMax = "80%";
+      TasksMax = 4096;
+    };
+  };
 }
