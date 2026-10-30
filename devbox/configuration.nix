@@ -30,8 +30,8 @@
       init.defaultBranch = "main";
       credential.helper = "manager";
       credential.credentialStore = "secretservice";
+      push.autoSetupRemote = true;
     };
-    autoSetupRemote = true;
   };
   services.gnome.gnome-keyring.enable = true;
   # --- Users -----------------------------------------------------------------
