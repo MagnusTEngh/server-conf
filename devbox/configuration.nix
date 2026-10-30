@@ -22,7 +22,7 @@
   environment.defaultPackages = [ ];
   documentation.enable = false;
   programs.command-not-found.enable = false;
-  environment.systemPackages = with pkgs; [ git curl tmux vim ];
+  environment.systemPackages = with pkgs; [ curl tmux vim git-credential-manager ];
   programs.nix-ld.enable = true; # lets downloaded generic Linux binaries run
   programs.git = {
     enable = true;
@@ -33,9 +33,6 @@
     };
     push.autoSetupRemote = true;
   };
-  environment.systemPackages = with pkgs; [
-    git-credential-manager
-  ];
   services.gnome.gnome-keyring.enable = true;
   # --- Users -----------------------------------------------------------------
   users.mutableUsers = false;
