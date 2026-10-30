@@ -1,4 +1,4 @@
-# Minimal, hardened NixOS dev box.
+# Minimal, hardened NixOS dev box for Raspberry Pi (aarch64).
 # - SSH reachable only over Tailscale
 # - "admin" can sudo / change the system; "agent" (group "dev") can only run code
 { config, lib, pkgs, ... }:
@@ -11,8 +11,12 @@
   networking.hostName = "devbox";
   time.timeZone = "UTC";
 
-  boot.loader.systemd-boot.enable = true; # use grub instead on BIOS/some VPSes
-  boot.loader.efi.canTouchEfiVariables = true;
+  # Raspberry Pi: no UEFI, boot via extlinux
+  boot.loader.grub.enable = false;
+  boot.loader.generic-extlinux-compatible.enable = true;
+
+  hardware.enableRedistributableFirmware = true; # Pi wifi/bluetooth/firmware blobs
+  zramSwap.enable = true; # compressed swap in RAM; helps on low-memory Pis
 
   # --- Minimalism ------------------------------------------------------------
   environment.defaultPackages = [ ];
@@ -92,7 +96,6 @@
 
   # --- Kernel / system hardening ---------------------------------------------
   security.protectKernelImage = true;
-  security.forcePageTableIsolation = true;
 
   boot.kernel.sysctl = {
     "kernel.dmesg_restrict" = 1;
