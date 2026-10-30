@@ -41,7 +41,7 @@
   # Admin: the only account that can escalate / rebuild the system.
   users.users.admin = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "networkmanager" ];
     hashedPassword = "REPLACE_ME"; # generate with: mkpasswd -m yescrypt
     openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAA... admin" ];
   };
@@ -70,6 +70,14 @@
     options = "--delete-older-than 14d";
   };
   nix.optimise.automatic = true;
+
+  # --- Networking (Wi-Fi + Ethernet, configured manually with nmtui/nmcli) ---
+  networking.networkmanager = {
+    enable = true;
+    unmanaged = [ "tailscale0" ]; # leave the Tailscale interface alone
+  };
+  networking.useDHCP = false; # NetworkManager does DHCP; avoids two managers fighting
+  hardware.wirelessRegulatoryDatabase = true;
 
   # --- Tailscale + firewall --------------------------------------------------
   # First boot: `sudo tailscale up` (or set services.tailscale.authKeyFile).
